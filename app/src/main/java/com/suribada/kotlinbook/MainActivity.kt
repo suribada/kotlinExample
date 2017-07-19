@@ -23,13 +23,54 @@ class MainActivity : Activity() {
         override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
             verticalLayout {
                 button {
-                    text = "ThreadPool"
+                    text = "ThreadPool-1,000"
                     onClick {
-                        view -> threadPool()
+                        view -> threadPool(1_000)
                         toast("end ThreadPool! :)") // ui.toast
                     }
                 }
-
+                button {
+                    text = "ThreadPool-10,000"
+                    onClick {
+                        view -> threadPool(10_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
+                button {
+                    text = "ThreadPool-50,000" // 에뮬 기준으로 여기까지는 문제 없음
+                    onClick {
+                        view -> threadPool(50_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
+                button {
+                    text = "ThreadPool-100,000"
+                    onClick {
+                        view -> threadPool(100_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
+                button {
+                    text = "ThreadPool-200,000"
+                    onClick {
+                        view -> threadPool(200_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
+                button {
+                    text = "ThreadPool-500,000"
+                    onClick {
+                        view -> threadPool(500_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
+                button {
+                    text = "ThreadPool-1,000,000"
+                    onClick {
+                        view -> threadPool(1_000_000)
+                        toast("end ThreadPool! :)") // ui.toast
+                    }
+                }
                 button {
                     text = "coroutine"
                     onClick {
@@ -40,10 +81,12 @@ class MainActivity : Activity() {
             }
         }.view()
 
-        fun threadPool() {
-            val threadPool = Executors.newCachedThreadPool()
+        // threadPool 함수 안에 넣으면 여러 번 실행하면 메모리 문제 발생. 이렇게 해도 스레드 개수가 커지면서 나중에는 메모리 문제 발생
+        val threadPool = Executors.newCachedThreadPool()
+
+        fun threadPool(count : Int) {
             val c = AtomicInteger()
-            for (i in 1..1_000_000) {
+            for (i in 1..count) {
                 threadPool.submit { c.addAndGet(i)  }
             }
             println(c.get())
@@ -52,11 +95,10 @@ class MainActivity : Activity() {
         fun coroutine() {
             val c = AtomicInteger()
 
-            for (i in 1..1_000_000)
+            for (i in 1..1_000_000) // 에뮬레이터 기준 1000만까지는 무리가 없고 억 단위로 가면 3분 넘게 소요.
                 launch(CommonPool) {
                     c.addAndGet(i)
                 }
-
             println(c.get())
         }
     }
