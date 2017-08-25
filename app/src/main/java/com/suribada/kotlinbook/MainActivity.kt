@@ -1,9 +1,12 @@
 package com.suribada.kotlinbook
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.*
@@ -16,6 +19,16 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivityUi().setContentView(this)
+        // 아래 2개는 다르다.
+        startActivity(Intent(this, KotlinActivity::class.java))
+        //startActivity(Intent(this, KotlinActivity::javaClass))
+    }
+
+    operator fun Activity.get(type : Int) : View? {
+        return when (type) {
+            1 -> TextView(this)
+            else -> ImageView(this)
+        }
     }
 
     class MainActivityUi : AnkoComponent<MainActivity> {
@@ -76,6 +89,26 @@ class MainActivity : Activity() {
                     onClick {
                         view -> coroutine()
                         toast("end Coroutine! :)") // AnkoContext 안에서 가능
+                    }
+                }
+                button {
+                    text = "range"
+                    onClick {
+                        println(parseRange("19-*")?.contains(20))
+                    }
+                }
+                button {
+                    text = "operator"
+                    onClick {
+//                        val view1 = this@with.owner[1]
+//                        this@with.owner[2]
+                    }
+                }
+                button {
+                    text = "kotlinActivity"
+                    onClick {
+                        // this@with.owner.startActivity(Intent(this@with.owner, KotlinActivity::class.java))
+                       startActivity<KotlinActivity>()
                     }
                 }
             }

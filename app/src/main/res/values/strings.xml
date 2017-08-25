@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KotlinBook</string>
+    <string name="title_activity_kotlin_actiivty">KotlinActiivty</string>
 </resources>
